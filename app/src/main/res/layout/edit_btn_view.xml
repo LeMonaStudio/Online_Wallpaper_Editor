@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="editType"
+            type="String" />
+        <variable
+            name="editActionListener"
+            type="com.thenativecitizens.onlinewallpapereditor.edit.EditActionListener" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            tools:text="Brush"
+            tools:icon="@drawable/ic_edit_brush"
+            app:iconTint="?attr/colorSecondary"
+            android:textColor="?attr/colorSecondary"
+            app:rippleColor="?attr/colorSecondaryVariant"
+            editActionType="@{editType}"
+            android:onClick="@{() -> editActionListener.onClick(editType)}"
+            app:iconGravity="top"
+            android:textAllCaps="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

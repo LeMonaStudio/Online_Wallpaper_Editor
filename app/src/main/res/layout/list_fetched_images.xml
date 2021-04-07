@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="fetchedImage"
+            type="com.thenativecitizens.onlinewallpapereditor.load.Image" />
+        <variable
+            name="clickListener"
+            type="com.thenativecitizens.onlinewallpapereditor.load.ImageListListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/single_image"
+            tools:src="@tools:sample/backgrounds/scenic"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="center"
+            android:adjustViewBounds="true"
+            imageUri="@{fetchedImage.uri}"
+            android:onClick="@{() -> clickListener.onClick(fetchedImage)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="120dp"
+            android:layout_height="120dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">Online Wallpapers &amp; Editor</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">This fetches from Firebase</string>
+    <string name="upload_btn_text">Upload</string>
+    <string name="wallpapers_btn_text">Wallpapers</string>
+    <string name="feedback_btn_text">Feedback</string>
+    <string name="media_access_permission">You need to grant the permission to load images from your device.</string>
+    <string name="write_media_access_permission">You need to grant the permission to save images on your device.</string>
+    <string name="wallpaper_permission">You need to grant the SET_WALLPAPER permission. Continue? </string>
+    <string name="permission_continue_snackbar_action_text">Okay</string>
+    <string name="permission_not_granted">Permission was denied.</string>
+    <string name="wallpaper_permission_denied">SET_WALLPAPER permission was denied.</string>
+    <string name="return_btn_text">Return</string>
+    <string name="preview_edit_screen_title">Gallery/%1$s</string>
+    <string name="download_image">Download</string>
+    <string name="edit_image_btn_text">Edit</string>
+    <string name="on_image_edit_dialog_prompt">Do you want the edited image to be loaded</string>
+    <string name="yes_dialog_btn_text">Yes</string>
+    <string name="no_dialog_btn_text">No</string>
+    <string name="no_edited_image">No edited image found</string>
+    <string name="unable_to_set_wallpaper">Unable to set image as wallpaper. Try another image.</string>
+    <string name="success_prompt">Image set as wallpaper successfully</string>
+    <string name="undo_btn_text">Undo</string>
+    <string name="redo_btn_text">Re-do</string>
+
+    <!--Edit Action Type-->
+    <string-array name="edit_action_types">
+        <item>Brush</item>
+        <item>Text</item>
+        <item>Eraser</item>
+        <item>Sticker</item>
+        <item>Emoji</item>
+    </string-array>
+
+    <!--Colors-->
+    <string-array name="color_list">
+        <item>black</item>
+        <item>purple</item>
+        <item>teal</item>
+        <item>crimson</item>
+        <item>red</item>
+        <item>white</item>
+        <item>blue</item>
+        <item>dark blue</item>
+        <item>chartreuse</item>
+        <item>dark sea green</item>
+        <item>brown</item>
+        <item>dark olive green</item>
+        <item>dark green</item>
+        <item>green</item>
+        <item>dark slate blue</item>
+        <item>yellow</item>
+        <item>orange</item>
+        <item>magenta</item>
+        <item>violet</item>
+        <item>sky blue</item>
+        <item>papaya whip</item>
+        <item>indigo</item>
+    </string-array>
+
+    <string name="edit_brush_btn_text">Brush</string>
+    <string name="edit_text_btn_text">Text</string>
+    <string name="edit_eraser_btn_text">Eraser</string>
+    <string name="edit_sticker_btn_text">Sticker</string>
+    <string name="edit_emoji_btn_text">Emoji</string>
+    <string name="save_edited_image">Save</string>
+    <string name="cancel_edit_btn">Cancel</string>
+    <string name="brush_size_text">Brush Size</string>
+    <string name="opacity_text">Opacity</string>
+    <string name="permission_granted">Permission granted. Image will save automatically.</string>
+</resources>

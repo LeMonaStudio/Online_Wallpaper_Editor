@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.thenativecitizens.onlinewallpapereditor.home.HomeFragment"
+        tools:layout="@layout/home_fragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_previewEditFragment"
+            app:destination="@id/previewEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/previewEditFragment"
+        android:name="com.thenativecitizens.onlinewallpapereditor.preview.PreviewEditFragment"
+        tools:layout="@layout/fragment_preview_edit"
+        android:label="PreviewEditFragment" >
+        <action
+            android:id="@+id/action_previewEditFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <argument
+            android:name="isDeviceImageSource"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_previewEditFragment_to_editFragment"
+            app:destination="@id/editFragment" />
+        <argument
+            android:name="clickedImage"
+            app:argType="com.thenativecitizens.onlinewallpapereditor.load.Image"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/editFragment"
+        tools:layout="@layout/edit_fragment"
+        android:name="com.thenativecitizens.onlinewallpapereditor.edit.EditFragment"
+        android:label="EditFragment" >
+        <action
+            android:id="@+id/action_editFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <argument
+            android:name="image"
+            app:argType="com.thenativecitizens.onlinewallpapereditor.load.Image"
+            app:nullable="true" />
+    </fragment>
+</navigation>

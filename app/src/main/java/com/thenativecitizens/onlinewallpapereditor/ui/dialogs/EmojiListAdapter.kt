@@ -1,4 +1,4 @@
-package com.thenativecitizens.onlinewallpapereditor.editdialogs
+package com.thenativecitizens.onlinewallpapereditor.ui.dialogs
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

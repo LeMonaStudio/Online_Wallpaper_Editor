@@ -5,11 +5,8 @@
 
     <data>
         <variable
-            name="imageClickedUrl"
-            type="String" />
-        <variable
-            name="isDeviceImage"
-            type="Boolean" />
+            name="imageClickedUri"
+            type="android.net.Uri" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,8 +20,7 @@
             tools:src="@tools:sample/backgrounds/scenic"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
-            imageUrl="@{imageClickedUrl}"
-            isDeviceImage="@{isDeviceImage}"
+            imageSource="@{imageClickedUri}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

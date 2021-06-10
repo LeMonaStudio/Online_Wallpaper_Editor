@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">Online Wallpapers &amp; Editor</string>
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_shared_preference">com.thenativecitizens.onlinewallpapereditor</string>
     <string name="hello_blank_fragment">This fetches from Firebase</string>
     <string name="upload_btn_text">Upload</string>
     <string name="wallpapers_btn_text">Wallpapers</string>
     <string name="feedback_btn_text">Feedback</string>
-    <string name="media_access_permission">You need to grant the permission to load images from your device.</string>
-    <string name="write_media_access_permission">You need to grant the permission to save images on your device.</string>
+    <string name="media_access_permission">%1$s permission is required.</string>
     <string name="wallpaper_permission">You need to grant the SET_WALLPAPER permission. Continue? </string>
-    <string name="permission_continue_snackbar_action_text">Okay</string>
+    <string name="permission_continue_snackbar_action_text">OK</string>
     <string name="permission_not_granted">Permission was denied.</string>
     <string name="wallpaper_permission_denied">SET_WALLPAPER permission was denied.</string>
     <string name="return_btn_text">Return</string>
@@ -22,51 +22,86 @@
     <string name="unable_to_set_wallpaper">Unable to set image as wallpaper. Try another image.</string>
     <string name="success_prompt">Image set as wallpaper successfully</string>
     <string name="undo_btn_text">Undo</string>
-    <string name="redo_btn_text">Re-do</string>
+    <string name="redo_btn_text">Redo</string>
 
     <!--Edit Action Type-->
     <string-array name="edit_action_types">
         <item>Brush</item>
         <item>Text</item>
         <item>Eraser</item>
-        <item>Sticker</item>
+        <item>Filter</item>
         <item>Emoji</item>
     </string-array>
 
     <!--Colors-->
     <string-array name="color_list">
         <item>black</item>
-        <item>purple</item>
-        <item>teal</item>
-        <item>crimson</item>
         <item>red</item>
         <item>white</item>
         <item>blue</item>
-        <item>dark blue</item>
-        <item>chartreuse</item>
-        <item>dark sea green</item>
-        <item>brown</item>
-        <item>dark olive green</item>
-        <item>dark green</item>
         <item>green</item>
-        <item>dark slate blue</item>
+        <item>purple</item>
         <item>yellow</item>
         <item>orange</item>
-        <item>magenta</item>
+        <item>brown</item>
         <item>violet</item>
         <item>sky blue</item>
+        <item>dark blue</item>
+        <item>teal</item>
+        <item>crimson</item>
+        <item>chartreuse</item>
+        <item>dark green</item>
+        <item>dark slate blue</item>
+        <item>dark sea green</item>
+        <item>magenta</item>
         <item>papaya whip</item>
+        <item>dark olive green</item>
         <item>indigo</item>
+    </string-array>
+
+    <!--Filters-->
+    <string-array name="filter_list">
+        <item>None</item>
+        <item>Auto Fix</item>
+        <item>Brightness</item>
+        <item>Contrast</item>
+        <item>Gray Scale</item>
+        <item>Grain</item>
+        <item>Sepia</item>
+        <item>Sharpen</item>
+        <item>Cross Process</item>
+        <item>Documentary</item>
+        <item>Due Tone</item>
+        <item>Fill Light</item>
+        <item>Vignette</item>
+        <item>Temperature</item>
+        <item>Saturate</item>
+        <item>Posterize</item>
+        <item>Negative</item>
+        <item>Lomish</item>
+        <item>Tint</item>
     </string-array>
 
     <string name="edit_brush_btn_text">Brush</string>
     <string name="edit_text_btn_text">Text</string>
     <string name="edit_eraser_btn_text">Eraser</string>
-    <string name="edit_sticker_btn_text">Sticker</string>
+    <string name="edit_filter_btn_text">Filter</string>
     <string name="edit_emoji_btn_text">Emoji</string>
     <string name="save_edited_image">Save</string>
     <string name="cancel_edit_btn">Cancel</string>
-    <string name="brush_size_text">Brush Size</string>
-    <string name="opacity_text">Opacity</string>
+    <string name="brush_size_title">Brush Size</string>
+    <string name="brush_color_title">Brush Color</string>
+    <string name="opacity_title">Opacity</string>
+    <string name="text_edit_title">Enter Text</string>
+    <string name="text_font_title">Text Font</string>
+    <string name="text_color_title">Text Color</string>
     <string name="permission_granted">Permission granted. Image will save automatically.</string>
+    <string name="recently_added_title">Recently Added</string>
+    <string name="dialog_choose_editor_title">Edit With:</string>
+    <string name="edit_with_this_app_btn_text">Edit with this app</string>
+    <string name="choose_image_editor_btn_text">Choose Image Editor</string>
+    <string name="add_image_fab_description">Load device image</string>
+    <string name="device_images_title_text">Device Images</string>
+    <string name="done_btn_text">Done</string>
+    <string name="permission_denied_textview_text">You denied permission to load device images.</string>
 </resources>

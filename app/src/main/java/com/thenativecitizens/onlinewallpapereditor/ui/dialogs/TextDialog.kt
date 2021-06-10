@@ -1,23 +1,24 @@
-package com.thenativecitizens.onlinewallpapereditor.editdialogs
+package com.thenativecitizens.onlinewallpapereditor.ui.dialogs
 
-import android.app.Dialog
+
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.thenativecitizens.onlinewallpapereditor.R
 import com.thenativecitizens.onlinewallpapereditor.databinding.DialogEditTextBinding
 
-class TextDialog: DialogFragment() {
+
+
+class TextDialog: BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogEditTextBinding
 
@@ -28,17 +29,12 @@ class TextDialog: DialogFragment() {
     private val textPrepareEdit = "PREPARE TEXT"
 
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+
         binding = DataBindingUtil.inflate(LayoutInflater.from(requireContext()),
             R.layout.dialog_edit_text, null, false)
 
         val bundle = Bundle()
-
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setView(binding.root)
-
-        val dialog = builder.create()
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         parentFragmentManager.setFragmentResultListener(
             textPrepareEdit, this,
@@ -58,8 +54,8 @@ class TextDialog: DialogFragment() {
         val adapter = ColorAdapter(ColorSelectionListener{
             when(it){
                 "black" -> selectedColorCode = ContextCompat.getColor(requireContext(), R.color.black)
-                "teal" -> selectedColorCode = ContextCompat.getColor(requireContext(), R.color.teal_200)
-                "purple" -> selectedColorCode = ContextCompat.getColor(requireContext(), R.color.purple_500)
+                "teal" -> selectedColorCode = ContextCompat.getColor(requireContext(), R.color.teal)
+                "purple" -> selectedColorCode = ContextCompat.getColor(requireContext(), R.color.purple)
                 "crimson" -> selectedColorCode = ContextCompat.getColor(requireContext(), R.color.crimson)
                 "blue" -> selectedColorCode = ContextCompat.getColor(requireContext(), R.color.blue)
                 "dark blue" -> selectedColorCode = ContextCompat.getColor(requireContext(), R.color.darK_blue)
@@ -105,19 +101,16 @@ class TextDialog: DialogFragment() {
 
         })
 
-        //Whne the user is done adding text and clicks the done button
+        //When the user is done adding text and clicks the done button
         binding.doneBtn.setOnClickListener {
             bundle.putString("text", enteredText)
             bundle.putInt("textColor", selectedColorCode)
             parentFragmentManager.setFragmentResult(
                 textEditKey, bundle
             )
-            dialog.dismiss()
+            dismiss()
         }
 
-
-
-
-        return dialog
+        return binding.root
     }
 }

@@ -10,8 +10,6 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:padding="16dp"
-        android:background="@color/black_shade"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView

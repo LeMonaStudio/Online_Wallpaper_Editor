@@ -3,47 +3,109 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.thenativecitizens.onlinewallpapereditor.home.HomeFragment"
-        tools:layout="@layout/home_fragment"
-        android:label="HomeFragment" >
+        android:id="@+id/splashFragment"
+        tools:layout="@layout/fragment_splash"
+        android:name="com.thenativecitizens.onlinewallpapereditor.ui.splash.SplashFragment"
+        android:label="SplashFragment" >
         <action
-            android:id="@+id/action_homeFragment_to_previewEditFragment"
-            app:destination="@id/previewEditFragment" />
+            android:id="@+id/action_splashFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.thenativecitizens.onlinewallpapereditor.ui.home.HomeFragment"
+        tools:layout="@layout/home_fragment"
+        android:label="HomeFragment">
+        <action
+            android:id="@+id/action_homeFragment_to_categoriesFragment"
+            app:destination="@id/categoriesFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_subCategoryFragment"
+            app:destination="@id/subCategoryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_editFragment"
+            app:destination="@id/editFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoriesFragment"
+        tools:layout="@layout/fragment_categories"
+        android:name="com.thenativecitizens.onlinewallpapereditor.ui.category.CategoriesFragment"
+        android:label="CategoriesFragment" >
+        <argument
+            android:name="categoryName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_categoriesFragment_to_subCategoryFragment"
+            app:destination="@id/subCategoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/previewEditFragment"
-        android:name="com.thenativecitizens.onlinewallpapereditor.preview.PreviewEditFragment"
         tools:layout="@layout/fragment_preview_edit"
+        android:name="com.thenativecitizens.onlinewallpapereditor.ui.preview.PreviewEditFragment"
         android:label="PreviewEditFragment" >
-        <action
-            android:id="@+id/action_previewEditFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
         <argument
-            android:name="isDeviceImageSource"
-            app:argType="boolean" />
+            android:name="imageUrl"
+            app:argType="string" />
         <action
             android:id="@+id/action_previewEditFragment_to_editFragment"
             app:destination="@id/editFragment" />
         <argument
-            android:name="clickedImage"
-            app:argType="com.thenativecitizens.onlinewallpapereditor.load.Image"
-            app:nullable="true" />
+            android:name="isDeviceImageSource"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/editFragment"
         tools:layout="@layout/edit_fragment"
-        android:name="com.thenativecitizens.onlinewallpapereditor.edit.EditFragment"
+        android:name="com.thenativecitizens.onlinewallpapereditor.ui.edit.EditFragment"
         android:label="EditFragment" >
-        <action
-            android:id="@+id/action_editFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
         <argument
-            android:name="image"
-            app:argType="com.thenativecitizens.onlinewallpapereditor.load.Image"
-            app:nullable="true" />
+            android:name="imageUrl"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_editFragment_to_brushDialog"
+            app:destination="@id/brushDialog" />
+        <action
+            android:id="@+id/action_editFragment_to_textDialog"
+            app:destination="@id/textDialog" />
+        <action
+            android:id="@+id/action_editFragment_to_filterDialog"
+            app:destination="@id/filterDialog" />
+        <argument
+            android:name="isDeviceImageSource"
+            app:argType="boolean" />
     </fragment>
+    <dialog
+        android:id="@+id/brushDialog"
+        tools:layout="@layout/dialog_edit_brush"
+        android:name="com.thenativecitizens.onlinewallpapereditor.ui.dialogs.BrushDialog"
+        android:label="BrushDialog" />
+    <dialog
+        android:id="@+id/textDialog"
+        tools:layout="@layout/dialog_edit_text"
+        android:name="com.thenativecitizens.onlinewallpapereditor.ui.dialogs.TextDialog"
+        android:label="TextDialog" />
+    <fragment
+        android:id="@+id/subCategoryFragment"
+        android:name="com.thenativecitizens.onlinewallpapereditor.ui.subcategory.SubCategoryFragment"
+        android:label="SubCategoryFragment"
+        tools:layout="@layout/fragment_sub_category" >
+        <action
+            android:id="@+id/action_subCategoryFragment_to_previewEditFragment"
+            app:destination="@id/previewEditFragment" />
+        <argument
+            android:name="subCategoryName"
+            app:argType="string" />
+        <argument
+            android:name="categoryName"
+            app:argType="string" />
+    </fragment>
+    <dialog
+        android:id="@+id/filterDialog"
+        android:name="com.thenativecitizens.onlinewallpapereditor.ui.dialogs.FilterDialog"
+        tools:layout="@layout/dialog_filter"
+        android:label="FilterDialog" />
+
 </navigation>

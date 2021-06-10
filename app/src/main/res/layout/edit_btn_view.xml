@@ -9,7 +9,7 @@
             type="String" />
         <variable
             name="editActionListener"
-            type="com.thenativecitizens.onlinewallpapereditor.edit.EditActionListener" />
+            type="com.thenativecitizens.onlinewallpapereditor.ui.edit.EditActionListener" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat

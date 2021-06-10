@@ -19,21 +19,31 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textview.MaterialTextView
-                android:text="@string/brush_size_text"
+                android:text="@string/brush_size_title"
                 android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:paddingEnd="16dp"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/black_shade"
+                style="@style/Theme.OnlineWallpaperEditor.LightDarkTexts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <SeekBar
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/brush_size_seek_text"
+                tools:text="12"
+                android:textSize="20sp"
+                android:padding="4sp"
+                android:layout_gravity="center"
+                android:gravity="center"/>
+            <androidx.appcompat.widget.AppCompatSeekBar
                 android:max="32"
                 android:progress="12"
                 android:id="@+id/brush_size_seek"
                 android:padding="16dp"
+                android:layout_gravity="center"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_width="match_parent"
@@ -47,17 +57,26 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textview.MaterialTextView
-                android:text="@string/opacity_text"
+                android:text="@string/opacity_title"
                 android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:paddingEnd="16dp"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/black_shade"
+                style="@style/Theme.OnlineWallpaperEditor.LightDarkTexts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <SeekBar
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/opacity_seek_text"
+                tools:text="80"
+                android:padding="4dp"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:gravity="center"/>
+            <androidx.appcompat.widget.AppCompatSeekBar
                 android:max="100"
                 android:padding="16dp"
                 android:progress="80"
@@ -69,12 +88,24 @@
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
+        <com.google.android.material.textview.MaterialTextView
+            android:text="@string/brush_color_title"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            style="@style/Theme.OnlineWallpaperEditor.LightDarkTexts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/color_list"
             android:layout_width="match_parent"
             android:clipToPadding="false"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
             app:spanCount="3"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/list_colors"

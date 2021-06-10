@@ -1,16 +1,19 @@
-package com.thenativecitizens.onlinewallpapereditor.edit
+package com.thenativecitizens.onlinewallpapereditor.ui.edit
 
 import android.Manifest
 import android.content.ContentValues
 import android.graphics.*
+import android.net.Uri
 import android.os.Build
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -23,14 +26,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.thenativecitizens.onlinewallpapereditor.R
 import com.thenativecitizens.onlinewallpapereditor.databinding.EditFragmentBinding
-import com.thenativecitizens.onlinewallpapereditor.editdialogs.BrushDialog
-import com.thenativecitizens.onlinewallpapereditor.editdialogs.EmojiDialog
-import com.thenativecitizens.onlinewallpapereditor.editdialogs.TextDialog
-import ja.burhanrashid52.photoeditor.OnPhotoEditorListener
-import ja.burhanrashid52.photoeditor.PhotoEditor
-import ja.burhanrashid52.photoeditor.ViewType
+import com.thenativecitizens.onlinewallpapereditor.ui.dialogs.EmojiDialog
+import ja.burhanrashid52.photoeditor.*
+import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class EditFragment : Fragment() {
 
@@ -50,18 +51,13 @@ class EditFragment : Fragment() {
 
     private val emojiUnicodeKey = "EMOJI UNICODE"
     private val emojiClickedKey = "EMOJI CLICKED"
+    private val filterClickedKey = "FILTER CLICKED"
 
     private var selectedBrushSize = 16
     private var selectedColorCode: Int = 0
     private var selectedColorOpacity = 100
-    private var userTextInput = "Long press to edit"
+    private var userTextInput = ""
     private lateinit var photoEditorRootView: View
-
-    /*override fun onStart() {
-        super.onStart()
-        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-    }*/
-
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -71,13 +67,15 @@ class EditFragment : Fragment() {
         val editViewModelFactory = EditViewModelFactory(application)
         viewModel = ViewModelProvider(this, editViewModelFactory).get(EditViewModel::class.java)
 
+        //Override onBackPressed for the back button
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
+            findNavController().popBackStack()
+        }
+
         //Argument
         val args: EditFragmentArgs by navArgs()
-
-        args.image?.let {
-            //Pass the Image
-            binding.imageClicked = args.image
-        }
+        binding.imageClickedUrl = args.imageUrl
+        binding.isDeviceImage = args.isDeviceImageSource
 
 
         requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){ isGranted ->
@@ -91,7 +89,8 @@ class EditFragment : Fragment() {
             }
         }
 
-        selectedColorCode = ContextCompat.getColor(requireContext(), R.color.teal_200)
+        selectedColorCode = ContextCompat.getColor(requireContext(), R.color.color_secondary)
+
         //Initialize the PhotoEditor
         initializePhotoEditor()
 
@@ -120,7 +119,7 @@ class EditFragment : Fragment() {
                 }
                 "Text" -> {
                     //Call the TextDialog
-                    photoEditor.addText(userTextInput, selectedColorCode)
+                    photoEditor.addText("Long press to edit", selectedColorCode)
                     //Add textListener to the photoEditor
                     photoEditor.addListener()
                 }
@@ -129,6 +128,10 @@ class EditFragment : Fragment() {
                     val unicode: ArrayList<String> = PhotoEditor.getEmojis(requireContext())
                     //Call the EmojiDialog
                     showEmojiDialog(unicode)
+                }
+                "Filter" -> {
+                    //Show the FilterDialog
+                    showFilterDialog()
                 }
             }
         })
@@ -140,10 +143,14 @@ class EditFragment : Fragment() {
             adapter.data = editActionTypes.asList()
         }
 
+        /**
+         * OnClicks
+         */
 
         //When the user decides to cancel the editing
         binding.cancelEditBtn.setOnClickListener {
-            findNavController().navigate(EditFragmentDirections.actionEditFragmentToHomeFragment())
+            //Go back to PreviewScreen
+            findNavController().popBackStack()
         }
 
         //When the undo or redo button is clicked
@@ -167,7 +174,9 @@ class EditFragment : Fragment() {
         }
 
 
-
+        /**
+         * ParentFragmentListeners
+         */
         //Listener for user's brush settings such as brush thickness, color and opacity
         //to be used to draw on the Image
         parentFragmentManager.setFragmentResultListener(
@@ -210,10 +219,83 @@ class EditFragment : Fragment() {
             }
         )
 
+        //Listening for user's selected filter
+        parentFragmentManager.setFragmentResultListener(
+            filterClickedKey,
+            viewLifecycleOwner,
+            {requestCode, result ->
+                if(requestCode == filterClickedKey){
+                    //Apply the Filter on the PhotoEditor
+                    when(result.getString("FilterName")){
+                        "None" ->{
+                            photoEditor.setFilterEffect(PhotoFilter.NONE)
+                        }
+                        "Brightness" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.BRIGHTNESS)
+                        }
+                        "Contrast" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.CONTRAST)
+                        }
+                        "Sepia" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.SEPIA)
+                        }
+                        "Grain" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.GRAIN)
+                        }
+                        "Gray Scale" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.GRAY_SCALE)
+                        }
+                        "Sharpen" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.SHARPEN)
+                        }
+                        "Auto Fix" ->{
+                            photoEditor.setFilterEffect(PhotoFilter.AUTO_FIX)
+                        }
+                        "Cross Process" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.CROSS_PROCESS)
+                        }
+                        "Documentary" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.DOCUMENTARY)
+                        }
+                        "Due Tone" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.DUE_TONE)
+                        }
+                        "Fill Light" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.FILL_LIGHT)
+                        }
+                        "Vignette" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.VIGNETTE)
+                        }
+                        "Temperature" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.TEMPERATURE)
+                        }
+                        "Saturate" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.SATURATE)
+                        }
+                        "Posterize" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.POSTERIZE)
+                        }
+                        "Negative" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.NEGATIVE)
+                        }
+                        "Lomish" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.LOMISH)
+                        }
+                        "Tint" -> {
+                            photoEditor.setFilterEffect(PhotoFilter.TINT)
+                        }
+                    }
+                }
+            }
+        )
+
+
 
         return binding.root
     }
 
+
+    //Saves the image on the device
     private fun saveImage() {
         Snackbar.make(binding.root, "Saving image...", Snackbar.LENGTH_SHORT).show()
 
@@ -240,11 +322,25 @@ class EditFragment : Fragment() {
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             }
         //prepare the details of the new image to be saved
-        val imageDetails = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, "Editor/${UUID.randomUUID()}")
+        val imageDetails = ContentValues()
+        val contentUri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            imageDetails.apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, "Editor/${UUID.randomUUID()}")
+                put(MediaStore.MediaColumns.MIME_TYPE, "image/*")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES+ File.separator+"OnlineWallpaper&Editor")
+            }
+            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+        } else {
+            imageDetails.apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, "Editor/${UUID.randomUUID()}")
+                put(MediaStore.MediaColumns.MIME_TYPE, "Image/jpg")
+            }
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         }
+
+
         //the new image's uri
-        val imageUri = resolver.insert(imageCollections, imageDetails)
+        val imageUri = resolver.insert(contentUri, imageDetails)
 
         imageUri?.apply {
             //write or make the new image and put it in the Uri
@@ -270,8 +366,7 @@ class EditFragment : Fragment() {
         parentFragmentManager.setFragmentResult(
             brushPrepareEditKey, bundle
         )
-        val dialog = BrushDialog()
-        dialog.show(parentFragmentManager, "Brush Dialog")
+        findNavController().navigate(EditFragmentDirections.actionEditFragmentToBrushDialog())
     }
 
     private fun showTextDialog(){
@@ -281,8 +376,7 @@ class EditFragment : Fragment() {
         parentFragmentManager.setFragmentResult(
             textPrepareEdit, bundle
         )
-        val dialog = TextDialog()
-        dialog.show(parentFragmentManager, "Text Dialog")
+        findNavController().navigate(EditFragmentDirections.actionEditFragmentToTextDialog())
     }
 
     private fun showEmojiDialog(unicode: ArrayList<String>) {
@@ -293,6 +387,10 @@ class EditFragment : Fragment() {
         )
         val dialog = EmojiDialog()
         dialog.show(parentFragmentManager, "Emoji")
+    }
+
+    private fun showFilterDialog(){
+        findNavController().navigate(EditFragmentDirections.actionEditFragmentToFilterDialog())
     }
 
 

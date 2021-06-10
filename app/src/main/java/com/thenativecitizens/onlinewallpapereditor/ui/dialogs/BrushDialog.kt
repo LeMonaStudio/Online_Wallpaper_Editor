@@ -1,10 +1,11 @@
-package com.thenativecitizens.onlinewallpapereditor.editdialogs
+package com.thenativecitizens.onlinewallpapereditor.ui.dialogs
 
-import android.app.Dialog
+
 import android.os.Bundle
-import android.view.Window
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.SeekBar
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,8 +14,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.thenativecitizens.onlinewallpapereditor.R
 import com.thenativecitizens.onlinewallpapereditor.databinding.DialogEditBrushBinding
 
-class BrushDialog: BottomSheetDialogFragment() {
 
+
+class BrushDialog: BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogEditBrushBinding
     private var selectedBrushSize = 0
@@ -27,15 +29,14 @@ class BrushDialog: BottomSheetDialogFragment() {
     private val bundle = Bundle()
 
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View{
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.dialog_edit_brush, null, false)
 
 
         //All colors user can draw with
         val black = ContextCompat.getColor(requireContext(), R.color.black)
-        val purple = ContextCompat.getColor(requireContext(), R.color.purple_500)
-        val teal = ContextCompat.getColor(requireContext(), R.color.teal_200)
-
+        val purple = ContextCompat.getColor(requireContext(), R.color.purple)
+        val teal = ContextCompat.getColor(requireContext(), R.color.teal)
 
         //Array of color names
         val arrayOfColorNames = resources.getStringArray(R.array.color_list)
@@ -53,14 +54,6 @@ class BrushDialog: BottomSheetDialogFragment() {
             }
         )
 
-
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setView(binding.root)
-
-        val dialog = builder.create()
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-
-
         //Defaults
         selectedBrushSize = binding.brushSizeSeek.progress
         selectedColorOpacity = binding.opacitySeek.progress
@@ -68,6 +61,7 @@ class BrushDialog: BottomSheetDialogFragment() {
         binding.brushSizeSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 selectedBrushSize = progress
+                binding.brushSizeSeekText.text = progress.toString()
                 bundle.putInt("BrushSize", selectedBrushSize)
                 parentFragmentManager.setFragmentResult(
                     brushEditKey, bundle
@@ -79,6 +73,7 @@ class BrushDialog: BottomSheetDialogFragment() {
         binding.opacitySeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 selectedColorOpacity = progress
+                binding.opacitySeekText.text = progress.toString()
                 bundle.putInt("Opacity", selectedColorOpacity)
                 parentFragmentManager.setFragmentResult(
                     brushEditKey, bundle
@@ -121,8 +116,7 @@ class BrushDialog: BottomSheetDialogFragment() {
             parentFragmentManager.setFragmentResult(
                 brushEditKey, bundle
             )
-            //Dismiss the dialog
-            dialog.dismiss()
+            dismiss()
         })
         binding.colorList.apply {
             this.layoutManager = layoutManager
@@ -130,8 +124,6 @@ class BrushDialog: BottomSheetDialogFragment() {
             adapter.data = arrayOfColorNames.asList()
         }
 
-
-
-        return dialog
+        return binding.root
     }
 }

@@ -8,18 +8,17 @@
             type="String" />
         <variable
             name="clickListener"
-            type="com.thenativecitizens.onlinewallpapereditor.editdialogs.ColorSelectionListener" />
+            type="com.thenativecitizens.onlinewallpapereditor.ui.dialogs.ColorSelectionListener" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-
         <com.google.android.material.imageview.ShapeableImageView
             app:srcCompat="@drawable/color_box"
             android:onClick="@{() -> clickListener.onClick(colorName) }"
             colorView="@{colorName}"
-            android:layout_width="48dp"
+            android:layout_width="56dp"
             android:layout_height="56dp"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>

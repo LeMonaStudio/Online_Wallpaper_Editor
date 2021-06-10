@@ -5,9 +5,11 @@
 
     <data>
         <variable
-            name="imageClicked"
-            type="com.thenativecitizens.onlinewallpapereditor.load.Image" />
-
+            name="imageClickedUrl"
+            type="String" />
+        <variable
+            name="isDeviceImage"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +17,7 @@
         android:layout_width="match_parent"
         android:background="@color/black"
         android:layout_height="match_parent"
-        tools:context=".edit.EditFragment">
+        tools:context=".ui.edit.EditFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             app:layout_constraintStart_toStartOf="parent"
@@ -34,10 +36,8 @@
                 android:id="@+id/undo_btn"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 app:icon="@drawable/ic_undo"
-                app:iconTint="?attr/colorSecondary"
-                android:textColor="?attr/colorSecondary"
-                app:rippleColor="?attr/colorSecondaryVariant"
                 app:iconGravity="textStart"
+                app:rippleColor="?attr/colorPrimary"
                 android:text="@string/undo_btn_text"
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
@@ -49,10 +49,8 @@
                 android:id="@+id/redo_btn"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 app:icon="@drawable/ic_redo"
-                app:iconTint="?attr/colorSecondary"
-                android:textColor="?attr/colorSecondary"
-                app:rippleColor="?attr/colorSecondaryVariant"
                 app:iconGravity="textEnd"
+                app:rippleColor="?attr/colorPrimary"
                 android:text="@string/redo_btn_text"
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
@@ -62,7 +60,8 @@
 
         <ja.burhanrashid52.photoeditor.PhotoEditorView
             android:id="@+id/photoEditorView"
-            imageForEdit="@{imageClicked.uri}"
+            imageForEdit="@{imageClickedUrl}"
+            isDeviceImage="@{isDeviceImage}"
             android:layout_width="match_parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -98,42 +97,43 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageButton
+                <com.google.android.material.button.MaterialButton
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/cancel_edit_btn"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/cancel_edit_btn"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:src="@drawable/ic_edit_clear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    app:icon="@drawable/ic_edit_clear"
+                    android:layout_marginStart="8dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"/>
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/current_editing_action"
                     app:layout_constraintEnd_toStartOf="@id/download_image_btn"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Brush"
-                    android:textColor="?attr/colorSecondary"
                     android:textSize="18sp"
+                    android:padding="4dp"
+                    android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/cancel_edit_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
-                <androidx.appcompat.widget.AppCompatImageButton
+                <com.google.android.material.button.MaterialButton
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:id="@+id/download_image_btn"
                     android:contentDescription="@string/save_edited_image"
+                    android:layout_marginEnd="8dp"
+                    app:icon="@drawable/ic_edit_download"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:src="@drawable/ic_edit_dowload"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
                     app:iconGravity="end"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

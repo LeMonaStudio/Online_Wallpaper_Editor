@@ -1,4 +1,4 @@
-package com.thenativecitizens.onlinewallpapereditor.editdialogs
+package com.thenativecitizens.onlinewallpapereditor.ui.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
@@ -18,7 +18,7 @@ class EmojiDialog: DialogFragment() {
     private val emojiUnicodeKey = "EMOJI UNICODE"
     private val emojiClickedKey = "EMOJI CLICKED"
 
-    private lateinit var arrayOfEmojiUnicodes: List<String>
+    private lateinit var arrayOfEmojiUnicode: List<String>
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.dialog_edit_emojis, null, false)
@@ -53,8 +53,8 @@ class EmojiDialog: DialogFragment() {
             {requestKey, result ->
                 if(requestKey == emojiUnicodeKey){
                     val arrayList: ArrayList<String>? = result.getStringArrayList("unicode")
-                    arrayOfEmojiUnicodes = arrayList!!.toList()
-                    adapter.data = arrayOfEmojiUnicodes
+                    arrayOfEmojiUnicode = arrayList!!.toList()
+                    adapter.data = arrayOfEmojiUnicode
                 }
             }
         )

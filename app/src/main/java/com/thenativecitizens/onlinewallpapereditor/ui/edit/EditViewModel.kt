@@ -1,4 +1,4 @@
-package com.thenativecitizens.onlinewallpapereditor.edit
+package com.thenativecitizens.onlinewallpapereditor.ui.edit
 
 import android.Manifest
 import android.app.Application
@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.thenativecitizens.onlinewallpapereditor.load.FetchViewModel
 
 class EditViewModel(application: Application) : AndroidViewModel(application) {
 

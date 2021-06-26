@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="filter"
+            type="String" />
+        <variable
+            name="listener"
+            type="com.thenativecitizens.onlinewallpapereditor.ui.dialogs.FilterSelectionListener" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:onClick="@{() -> listener.onClick(filter)}"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:layout_marginBottom="8dp"
+        android:id="@+id/root"
+
+        android:layout_width="96dp"
+        android:layout_height="96dp">
+        <ja.burhanrashid52.photoeditor.PhotoEditorView
+            android:id="@+id/photoEditorView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:photo_src="@drawable/butterfly" />
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="36dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black_shade"
+                android:alpha="0.8"/>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/filter_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                tools:text="Filter"/>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

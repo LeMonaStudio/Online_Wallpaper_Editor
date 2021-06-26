@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:orientation="vertical"
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:minWidth="400dp"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/done_btn"
+            android:layout_gravity="end"
+            android:text="@string/done_btn_text"
+            android:textSize="16sp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="8dp"
+            android:textAllCaps="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:text="@string/text_edit_title"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            style="@style/Theme.OnlineWallpaperEditor.LightDarkTexts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/user_text"
+            tools:textColor="@color/white"
+            android:textSize="24sp"
+            tools:text="Enter Text"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:focusable="true"
+            android:focusedByDefault="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_width="match_parent"
+            app:layout_constraintBottom_toTopOf="@id/color_list"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:text="@string/text_font_title"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textStyle="bold"
+            style="@style/Theme.OnlineWallpaperEditor.LightDarkTexts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:text="@string/text_color_title"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            style="@style/Theme.OnlineWallpaperEditor.LightDarkTexts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/color_list"
+            android:layout_width="match_parent"
+            android:clipToPadding="false"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:spanCount="3"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/list_colors"
+            tools:itemCount="6" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

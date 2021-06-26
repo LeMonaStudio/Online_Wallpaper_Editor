@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="category"
+            type="com.thenativecitizens.onlinewallpapereditor.util.Category" />
+        <variable
+            name="listener"
+            type="com.thenativecitizens.onlinewallpapereditor.ui.home.CategoryListListener" />
+        <variable
+            name="isDeviceImage"
+            type="Boolean" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="8dp"
+        app:cardBackgroundColor="@color/black_shade"
+        android:onClick="@{()-> listener.onClick(category)}"
+        android:layout_height="250dp">
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/backgrounds/scenic"
+                imageUrl="@{category.categoryImagePlaceholderUrl}"
+                isDeviceImage="@{isDeviceImage}"
+                android:layout_height="match_parent"/>
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Recently Added"
+                android:textSize="22sp"
+                android:id="@+id/category_name"
+                android:fontFamily="@font/roboto_bold"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_margin="16dp"
+                android:layout_gravity="bottom|start"
+                android:maxLines="1"/>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

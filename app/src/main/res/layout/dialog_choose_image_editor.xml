@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".ui.dialogs.ChooseImageEditorDialog">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_choose_editor_title"
+            style="@style/Theme.OnlineWallpaperEditor.LightDarkTexts"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:textSize="20sp"/>
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:padding="12dp"
+            android:id="@+id/continue_with_app_btn"
+            android:layout_marginBottom="4dp"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_with_this_app_btn_text"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:id="@+id/choose_image_editor_btn"
+            android:layout_marginEnd="24dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/choose_image_editor_btn_text"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

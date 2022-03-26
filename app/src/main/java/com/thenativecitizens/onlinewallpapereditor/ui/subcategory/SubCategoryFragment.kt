@@ -31,7 +31,7 @@ class SubCategoryFragment : Fragment() {
 
 
         //CategoryViewModel
-        subCategoryViewModel = ViewModelProvider(this).get(SubCategoryViewModel::class.java)
+        subCategoryViewModel = ViewModelProvider(this)[SubCategoryViewModel::class.java]
 
         //Call to fetch wallpapers for this SubCategory
         subCategoryViewModel.fetchWallpapers(args.subCategoryName, args.categoryName)

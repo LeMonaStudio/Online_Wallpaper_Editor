@@ -10,8 +10,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import com.thenativecitizens.onlinewallpapereditor.util.Category
-import com.thenativecitizens.onlinewallpapereditor.util.SubCategory
+import com.thenativecitizens.onlinewallpapereditor.model.Category
+import com.thenativecitizens.onlinewallpapereditor.model.SubCategory
 import kotlinx.coroutines.*
 
 class CategoriesViewModel : ViewModel(){
@@ -49,7 +49,7 @@ class CategoriesViewModel : ViewModel(){
                         sbCategoryFirebaseDatabaseRef.child(categoryName).child(subCategoryName)
                             .addListenerForSingleValueEvent(object : ValueEventListener {
                                 override fun onDataChange(snapshot: DataSnapshot) {
-                                    snapshot.getValue<SubCategory>()?.let {subCat ->
+                                    snapshot.getValue<SubCategory>()?.let { subCat ->
                                         listOfSubCategories.add(subCat)
                                         _subCategoryList.value = listOfSubCategories
                                     }

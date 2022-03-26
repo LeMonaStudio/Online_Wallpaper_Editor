@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.thenativecitizens.onlinewallpapereditor.databinding.ListWallpapersViewBinding
-import com.thenativecitizens.onlinewallpapereditor.util.Wallpaper
+import com.thenativecitizens.onlinewallpapereditor.model.Wallpaper
 
 class WallpaperListAdapter(private val wallpaperListListener: WallpaperListListener?) :
     RecyclerView.Adapter<WallpaperListAdapter.ViewHolder>(){

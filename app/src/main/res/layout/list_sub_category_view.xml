@@ -6,7 +6,7 @@
     <data>
         <variable
             name="subCategory"
-            type="com.thenativecitizens.onlinewallpapereditor.util.SubCategory" />
+            type="com.thenativecitizens.onlinewallpapereditor.model.SubCategory" />
         <variable
             name="subCategoryImagePlaceholderUrl"
             type="String" />

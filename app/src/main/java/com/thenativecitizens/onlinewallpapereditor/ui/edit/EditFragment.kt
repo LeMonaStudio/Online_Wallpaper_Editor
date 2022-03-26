@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,6 +30,7 @@ import com.thenativecitizens.onlinewallpapereditor.databinding.EditFragmentBindi
 import com.thenativecitizens.onlinewallpapereditor.ui.dialogs.EmojiDialog
 import ja.burhanrashid52.photoeditor.*
 import java.io.File
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -63,9 +65,7 @@ class EditFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.edit_fragment, container, false)
 
-        val application = requireNotNull(this.activity).application
-        val editViewModelFactory = EditViewModelFactory(application)
-        viewModel = ViewModelProvider(this, editViewModelFactory).get(EditViewModel::class.java)
+        viewModel = ViewModelProvider(this)[EditViewModel::class.java]
 
         //Override onBackPressed for the back button
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
@@ -180,114 +180,110 @@ class EditFragment : Fragment() {
         //Listener for user's brush settings such as brush thickness, color and opacity
         //to be used to draw on the Image
         parentFragmentManager.setFragmentResultListener(
-            brushEditKey, this,
-            {resultKey, result ->
-                if(resultKey == brushEditKey){
-                    selectedBrushSize = result.getInt("BrushSize", selectedBrushSize)
-                    selectedColorOpacity = result.getInt("Opacity", selectedColorOpacity)
-                    selectedColorCode = result.getInt("BrushColorCode", selectedColorCode)
-                    with(photoEditor){
-                        setBrushDrawingMode(true) //Activates the Brush for draw
-                        brushSize = selectedBrushSize.toFloat()
-                        setOpacity(selectedColorOpacity)
-                        brushColor = selectedColorCode
-                    }
+            brushEditKey, this
+        ) { resultKey, result ->
+            if (resultKey == brushEditKey) {
+                selectedBrushSize = result.getInt("BrushSize", selectedBrushSize)
+                selectedColorOpacity = result.getInt("Opacity", selectedColorOpacity)
+                selectedColorCode = result.getInt("BrushColorCode", selectedColorCode)
+                with(photoEditor) {
+                    setBrushDrawingMode(true) //Activates the Brush for draw
+                    brushSize = selectedBrushSize.toFloat()
+                    setOpacity(selectedColorOpacity)
+                    brushColor = selectedColorCode
                 }
             }
-        )
+        }
 
         //Listening for the result user's text input to be added to the image
         parentFragmentManager.setFragmentResultListener(
-            textEditKey, this,
-            {requestKey, result ->
-                if(requestKey == textEditKey){
-                    userTextInput = result.getString("text", userTextInput)
-                    selectedColorCode = result.getInt("textColor", selectedColorCode)
-                    photoEditor.editText(photoEditorRootView , userTextInput, selectedColorCode)
-                }
+            textEditKey, this
+        ) { requestKey, result ->
+            if (requestKey == textEditKey) {
+                userTextInput = result.getString("text", userTextInput)
+                selectedColorCode = result.getInt("textColor", selectedColorCode)
+                photoEditor.editText(photoEditorRootView, userTextInput, selectedColorCode)
             }
-        )
+        }
 
         //Listening for user's selected emoji to be displayed and added to the Image
         parentFragmentManager.setFragmentResultListener(
-            emojiClickedKey, this,
-            {requestKey, result ->
-                if(requestKey == emojiClickedKey){
-                    val emojiSelectedUnicode = result.getString("emoji")
-                    photoEditor.addEmoji(emojiSelectedUnicode)
-                }
+            emojiClickedKey, this
+        ) { requestKey, result ->
+            if (requestKey == emojiClickedKey) {
+                val emojiSelectedUnicode = result.getString("emoji")
+                photoEditor.addEmoji(emojiSelectedUnicode)
             }
-        )
+        }
 
         //Listening for user's selected filter
         parentFragmentManager.setFragmentResultListener(
             filterClickedKey,
-            viewLifecycleOwner,
-            {requestCode, result ->
-                if(requestCode == filterClickedKey){
-                    //Apply the Filter on the PhotoEditor
-                    when(result.getString("FilterName")){
-                        "None" ->{
-                            photoEditor.setFilterEffect(PhotoFilter.NONE)
-                        }
-                        "Brightness" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.BRIGHTNESS)
-                        }
-                        "Contrast" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.CONTRAST)
-                        }
-                        "Sepia" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.SEPIA)
-                        }
-                        "Grain" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.GRAIN)
-                        }
-                        "Gray Scale" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.GRAY_SCALE)
-                        }
-                        "Sharpen" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.SHARPEN)
-                        }
-                        "Auto Fix" ->{
-                            photoEditor.setFilterEffect(PhotoFilter.AUTO_FIX)
-                        }
-                        "Cross Process" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.CROSS_PROCESS)
-                        }
-                        "Documentary" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.DOCUMENTARY)
-                        }
-                        "Due Tone" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.DUE_TONE)
-                        }
-                        "Fill Light" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.FILL_LIGHT)
-                        }
-                        "Vignette" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.VIGNETTE)
-                        }
-                        "Temperature" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.TEMPERATURE)
-                        }
-                        "Saturate" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.SATURATE)
-                        }
-                        "Posterize" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.POSTERIZE)
-                        }
-                        "Negative" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.NEGATIVE)
-                        }
-                        "Lomish" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.LOMISH)
-                        }
-                        "Tint" -> {
-                            photoEditor.setFilterEffect(PhotoFilter.TINT)
-                        }
+            viewLifecycleOwner
+        ) { requestCode, result ->
+            if (requestCode == filterClickedKey) {
+                //Apply the Filter on the PhotoEditor
+                when (result.getString("FilterName")) {
+                    "None" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.NONE)
+                    }
+                    "Brightness" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.BRIGHTNESS)
+                    }
+                    "Contrast" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.CONTRAST)
+                    }
+                    "Sepia" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.SEPIA)
+                    }
+                    "Grain" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.GRAIN)
+                    }
+                    "Gray Scale" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.GRAY_SCALE)
+                    }
+                    "Sharpen" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.SHARPEN)
+                    }
+                    "Auto Fix" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.AUTO_FIX)
+                    }
+                    "Cross Process" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.CROSS_PROCESS)
+                    }
+                    "Documentary" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.DOCUMENTARY)
+                    }
+                    "Due Tone" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.DUE_TONE)
+                    }
+                    "Fill Light" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.FILL_LIGHT)
+                    }
+                    "Vignette" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.VIGNETTE)
+                    }
+                    "Temperature" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.TEMPERATURE)
+                    }
+                    "Saturate" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.SATURATE)
+                    }
+                    "Posterize" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.POSTERIZE)
+                    }
+                    "Negative" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.NEGATIVE)
+                    }
+                    "Lomish" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.LOMISH)
+                    }
+                    "Tint" -> {
+                        photoEditor.setFilterEffect(PhotoFilter.TINT)
                     }
                 }
             }
-        )
+        }
 
 
 
@@ -314,26 +310,19 @@ class EditFragment : Fragment() {
         /**prepare the MediaStore API **/
         //content resolver
         val resolver = requireContext().contentResolver
-        //get the collection of images on the device internal memory
-        val imageCollections =
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-            } else{
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            }
         //prepare the details of the new image to be saved
         val imageDetails = ContentValues()
         val contentUri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
             imageDetails.apply {
                 put(MediaStore.MediaColumns.DISPLAY_NAME, "Editor/${UUID.randomUUID()}")
-                put(MediaStore.MediaColumns.MIME_TYPE, "image/*")
+                put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
                 put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES+ File.separator+"OnlineWallpaper&Editor")
             }
             MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         } else {
             imageDetails.apply {
                 put(MediaStore.MediaColumns.DISPLAY_NAME, "Editor/${UUID.randomUUID()}")
-                put(MediaStore.MediaColumns.MIME_TYPE, "Image/jpg")
+                put(MediaStore.MediaColumns.MIME_TYPE, "Image/jpeg")
             }
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         }
@@ -342,18 +331,22 @@ class EditFragment : Fragment() {
         //the new image's uri
         val imageUri = resolver.insert(contentUri, imageDetails)
 
-        imageUri?.apply {
-            //write or make the new image and put it in the Uri
-            val stream =  resolver.openOutputStream(this)
-            //compress the bitmap
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-            //flush the stream
-            stream?.flush()
-            //close the stream
-            stream?.close()
+        try {
+            imageUri?.apply {
+                //write or make the new image and put it in the Uri
+                val stream =  resolver.openOutputStream(this)
+                //compress the bitmap
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+                //flush the stream
+                stream?.flush()
+                //close the stream
+                stream?.close()
 
-            //Notify the user
-            Snackbar.make(binding.root, "Success! You saved $this", Snackbar.LENGTH_LONG).show()
+                //Notify the user
+                Snackbar.make(binding.root, "Success! You saved $this", Snackbar.LENGTH_LONG).show()
+            }
+        } catch (exception: Exception){
+            Toast.makeText(requireContext(), "Error saving image: $exception", Toast.LENGTH_LONG).show()
         }
     }
 

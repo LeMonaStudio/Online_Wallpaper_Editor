@@ -32,7 +32,7 @@ class HomeFragment : Fragment(){
         binding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false)
 
         //ViewModel
-        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
 
         //Override onBackPressed for the back button
@@ -43,10 +43,10 @@ class HomeFragment : Fragment(){
         val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         val adapter = CategoryListAdapter(CategoryListListener { category ->
             when{
-                category.subCategoryList.size >= 2 ->{
+                category.subCategoryList.size >= 2 -> {
                     findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToCategoriesFragment(category.categoryName))
                 }
-                category.subCategoryList.size == 1 ->{
+                category.subCategoryList.size == 1 -> {
                     findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSubCategoryFragment(category.subCategoryList[0], category.categoryName))
                 }
                 else ->{

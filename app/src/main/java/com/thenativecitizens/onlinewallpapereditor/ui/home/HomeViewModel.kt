@@ -6,7 +6,7 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import com.thenativecitizens.onlinewallpapereditor.util.Category
+import com.thenativecitizens.onlinewallpapereditor.model.Category
 import kotlinx.coroutines.*
 
 class HomeViewModel(application: Application) : AndroidViewModel(application){

@@ -49,15 +49,14 @@ class EmojiDialog: DialogFragment() {
 
         //Get the ArrayList of EmojiUnicodes
         parentFragmentManager.setFragmentResultListener(
-            emojiUnicodeKey, this,
-            {requestKey, result ->
-                if(requestKey == emojiUnicodeKey){
-                    val arrayList: ArrayList<String>? = result.getStringArrayList("unicode")
-                    arrayOfEmojiUnicode = arrayList!!.toList()
-                    adapter.data = arrayOfEmojiUnicode
-                }
+            emojiUnicodeKey, this
+        ) { requestKey, result ->
+            if (requestKey == emojiUnicodeKey) {
+                val arrayList: ArrayList<String>? = result.getStringArrayList("unicode")
+                arrayOfEmojiUnicode = arrayList!!.toList()
+                adapter.data = arrayOfEmojiUnicode
             }
-        )
+        }
 
 
 

@@ -10,8 +10,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import com.thenativecitizens.onlinewallpapereditor.util.SubCategory
-import com.thenativecitizens.onlinewallpapereditor.util.Wallpaper
+import com.thenativecitizens.onlinewallpapereditor.model.SubCategory
+import com.thenativecitizens.onlinewallpapereditor.model.Wallpaper
 import kotlinx.coroutines.*
 
 class SubCategoryViewModel: ViewModel(){

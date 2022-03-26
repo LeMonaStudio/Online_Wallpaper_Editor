@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.thenativecitizens.onlinewallpapereditor.databinding.ListSubCategoryViewBinding
-import com.thenativecitizens.onlinewallpapereditor.util.SubCategory
+import com.thenativecitizens.onlinewallpapereditor.model.SubCategory
 
 class SubCategoryListAdapter(private val listener: SubCategoryListListener): RecyclerView.Adapter<SubCategoryListAdapter.ViewHolder>(){
 

@@ -42,17 +42,16 @@ class BrushDialog: BottomSheetDialogFragment() {
         val arrayOfColorNames = resources.getStringArray(R.array.color_list)
 
         parentFragmentManager.setFragmentResultListener(
-            brushPrepareEditKey, this,
-            {requestKey, result ->
-                if(requestKey == brushPrepareEditKey){
-                    selectedBrushSize = result.getInt("Brush", binding.brushSizeSeek.progress)
-                    binding.brushSizeSeek.progress = selectedBrushSize
-                    selectedColorOpacity = result.getInt("Opacity", binding.opacitySeek.progress)
-                    binding.opacitySeek.progress = selectedColorOpacity
-                    selectedColorCode = result.getInt("ColorCode", teal)
-                }
+            brushPrepareEditKey, this
+        ) { requestKey, result ->
+            if (requestKey == brushPrepareEditKey) {
+                selectedBrushSize = result.getInt("Brush", binding.brushSizeSeek.progress)
+                binding.brushSizeSeek.progress = selectedBrushSize
+                selectedColorOpacity = result.getInt("Opacity", binding.opacitySeek.progress)
+                binding.opacitySeek.progress = selectedColorOpacity
+                selectedColorCode = result.getInt("ColorCode", teal)
             }
-        )
+        }
 
         //Defaults
         selectedBrushSize = binding.brushSizeSeek.progress

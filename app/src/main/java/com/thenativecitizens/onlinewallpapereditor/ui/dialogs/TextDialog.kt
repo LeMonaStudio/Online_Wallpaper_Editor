@@ -37,16 +37,15 @@ class TextDialog: BottomSheetDialogFragment() {
         val bundle = Bundle()
 
         parentFragmentManager.setFragmentResultListener(
-            textPrepareEdit, this,
-            {requestKey, result ->
-                if(requestKey == textPrepareEdit){
-                    enteredText = result.getString("text", enteredText)
-                    binding.userText.setText(enteredText, TextView.BufferType.EDITABLE)
-                    selectedColorCode = result.getInt("textColor")
-                    binding.userText.setTextColor(selectedColorCode)
-                }
+            textPrepareEdit, this
+        ) { requestKey, result ->
+            if (requestKey == textPrepareEdit) {
+                enteredText = result.getString("text", enteredText)
+                binding.userText.setText(enteredText, TextView.BufferType.EDITABLE)
+                selectedColorCode = result.getInt("textColor")
+                binding.userText.setTextColor(selectedColorCode)
             }
-        )
+        }
 
         //Array of color names
         val arrayOfColorNames = resources.getStringArray(R.array.color_list)

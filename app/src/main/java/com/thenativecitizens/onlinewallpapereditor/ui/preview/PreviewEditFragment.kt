@@ -43,6 +43,9 @@ class PreviewEditFragment : Fragment() {
     //Permission request launcher
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
+    //Fragment Argument
+    private lateinit var imageUrl: String
+    private var isDeviceImageSource = false
     //Gets result from activity to know if image was edited outside the app or not
     private lateinit var requestImageEditedResult: ActivityResultLauncher<Intent>
 
@@ -51,6 +54,10 @@ class PreviewEditFragment : Fragment() {
     //The Active Permission been requested from the user
     private var activePermissionRequested = ""
 
+    //If the User is performing an editing operation
+    private var isPerformExternalEditing = false
+    private var isPerformInAppEditing = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -58,16 +65,27 @@ class PreviewEditFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_preview_edit, container, false)
 
         //ViewModel
-        previewViewModel = ViewModelProvider(this).get(PreviewViewModel::class.java)
+        previewViewModel = ViewModelProvider(this)[PreviewViewModel::class.java]
 
         val args: PreviewEditFragmentArgs by navArgs()
+        imageUrl = args.imageUrl
+        isDeviceImageSource = args.isDeviceImageSource
 
         binding.imageClickedUrl = args.imageUrl
         binding.isDeviceImage = args.isDeviceImageSource
 
         requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){ isGranted ->
             if(isGranted){
-                Snackbar.make(binding.root, "$activePermissionRequested permission granted", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "$activePermissionRequested permission granted.", Snackbar.LENGTH_SHORT).show()
+                //if User was trying to edit an Image continue
+                if (isPerformExternalEditing){
+                    isPerformExternalEditing = false
+                    beginExternalEdit()
+                }
+                if (isPerformInAppEditing){
+                    isPerformInAppEditing = false
+                    beginInAppEditing()
+                }
             } else{
                 Snackbar.make(binding.root, "$activePermissionRequested permission denied", Snackbar.LENGTH_SHORT).show()
             }
@@ -79,6 +97,12 @@ class PreviewEditFragment : Fragment() {
             when(result.resultCode){
                 RESULT_OK -> {
                     resolver.delete(imageUri!!, null, null)
+                    Snackbar.make(binding.root, "A copy of this image has been saved on your device",
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction("OK"){
+                            findNavController().popBackStack()
+                        }
+                        .show()
                 }
                 RESULT_CANCELED -> {
                     resolver.delete(imageUri!!, null, null)
@@ -100,7 +124,7 @@ class PreviewEditFragment : Fragment() {
             //call the function to save the image to the device
             if (saveImage())
             //Notify the user the Image has been saved
-                Snackbar.make(binding.root, "Success! Image saved", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(binding.root, "Success! Image saved", Snackbar.LENGTH_LONG).show()
         }
 
 
@@ -109,36 +133,55 @@ class PreviewEditFragment : Fragment() {
          */
         parentFragmentManager.setFragmentResultListener(
             chooseImageEditorKey,
-            viewLifecycleOwner,
-            {requestKey, result ->
-                if(requestKey == chooseImageEditorKey){
-                    when(result.getInt("Edit With")){
-                        1 -> {
-                            //Continue with this app to edit
-                            findNavController().navigate(PreviewEditFragmentDirections
-                                .actionPreviewEditFragmentToEditFragment(args.imageUrl, args.isDeviceImageSource))
-                        }
-                        2 -> {
-                            //Save the Image File for Edit
-                            if(saveImage()){
-                                //Launch Intent to choose other image editor
-                                //on user's device
-                                //Send the Image to the device's image editor
-                                val editIntent = Intent(Intent.ACTION_EDIT)
-                                editIntent.apply {
-                                    setDataAndType(imageUri, "image/*")
-                                    addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                }
-                                requestImageEditedResult.launch(editIntent)
-                            }
-                        }
+            viewLifecycleOwner
+        ) { requestKey, result ->
+            if (requestKey == chooseImageEditorKey) {
+                when (result.getInt("Edit With")) {
+                    1 -> {
+                        //begin in-app editing
+                        beginInAppEditing()
+                    }
+                    2 -> {
+                        //begin external editing
+                        beginExternalEdit()
                     }
                 }
             }
-        )
+        }
 
         return binding.root
+    }
+
+    //Edits the app internally
+    private fun beginInAppEditing() {
+        isPerformInAppEditing = true
+        //Continue with this app to edit
+        findNavController().navigate(
+            PreviewEditFragmentDirections
+                .actionPreviewEditFragmentToEditFragment(
+                    imageUrl,
+                    isDeviceImageSource
+                )
+        )
+    }
+
+    //Edits an Image using other app
+    private fun beginExternalEdit() {
+        //Save the Image File for Edit
+        if (saveImage()) {
+            //let the UI know the user is trying to edit an image
+            isPerformExternalEditing = true
+            //Launch Intent to choose other image editor
+            //on user's device
+            //Send the Image to the device's image editor
+            val editIntent = Intent(Intent.ACTION_EDIT)
+            editIntent.apply {
+                setDataAndType(imageUri, "image/*")
+                addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            requestImageEditedResult.launch(editIntent)
+        }
     }
 
 
@@ -178,14 +221,14 @@ class PreviewEditFragment : Fragment() {
             val contentUri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
                 imageDetails.apply {
                     put(MediaStore.MediaColumns.DISPLAY_NAME, "Editor/${UUID.randomUUID()}")
-                    put(MediaStore.MediaColumns.MIME_TYPE, "image/*")
+                    put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
                     put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES+File.separator+"OnlineWallpaper&Editor")
                 }
                 MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
             } else {
                 imageDetails.apply {
                     put(MediaStore.MediaColumns.DISPLAY_NAME, "Editor/${UUID.randomUUID()}")
-                    put(MediaStore.MediaColumns.MIME_TYPE, "Image/jpg")
+                    put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
                 }
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             }

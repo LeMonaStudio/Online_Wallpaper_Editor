@@ -24,7 +24,8 @@
         android:theme="@style/Theme.OnlineWallpaperEditor">
 
         <service android:name=".service.FirebaseMessageReceiver"
-            android:permission="com.google.android.c2dm.permission.send">
+            android:permission="com.google.android.c2dm.permission.send"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.RESPOND_VIA_MESSAGE"/>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -38,7 +39,8 @@
                 android:resource="@color/color_primary"/>
         </service>
 
-        <activity android:name=".MainActivity" android:windowSoftInputMode="adjustResize">
+        <activity android:name=".MainActivity" android:windowSoftInputMode="adjustResize"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

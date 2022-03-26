@@ -28,7 +28,7 @@ class CategoriesFragment : Fragment() {
         val args = CategoriesFragmentArgs.fromBundle(requireArguments())
 
         //CategoryViewModel
-        categoriesViewModel = ViewModelProvider(this).get(CategoriesViewModel::class.java)
+        categoriesViewModel = ViewModelProvider(this)[CategoriesViewModel::class.java]
 
         //Display the CategoryName
         binding.categoryName.text = args.categoryName

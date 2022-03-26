@@ -1,11 +1,11 @@
 package com.thenativecitizens.onlinewallpapereditor.ui.home
 
-import android.content.Context
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.thenativecitizens.onlinewallpapereditor.databinding.ListCategoryViewBinding
-import com.thenativecitizens.onlinewallpapereditor.util.Category
+import com.thenativecitizens.onlinewallpapereditor.model.Category
 
 
 
@@ -26,9 +26,9 @@ class CategoryListAdapter(private val listener: CategoryListListener): RecyclerV
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val ctx = holder.itemView.context
+        //val ctx = holder.itemView.context
         val category = data[position]
-        holder.bind(category, listener, ctx)
+        holder.bind(category, listener)
     }
 
 
@@ -42,7 +42,7 @@ class CategoryListAdapter(private val listener: CategoryListListener): RecyclerV
             }
         }
 
-        fun bind(category: Category, listener: CategoryListListener, ctx: Context) {
+        fun bind(category: Category, listener: CategoryListListener) {
             binding.category = category
             binding.categoryName.text = category.categoryName
             binding.isDeviceImage = false

@@ -31,7 +31,7 @@ class SplashFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_splash, container, false)
 
         //delay
-        delayUtil = ViewModelProvider(this).get(DelayUtil::class.java)
+        delayUtil = ViewModelProvider(this)[DelayUtil::class.java]
 
         //begin the delay
         delayUtil.beginDelay(5_000L) //delays the splash for 5 seconds

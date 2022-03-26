@@ -56,7 +56,9 @@ class PreviewEditFragment : Fragment() {
 
     //If the User is performing an editing operation
     private var isPerformExternalEditing = false
-    private var isPerformInAppEditing = false
+
+    //if the user is performing a image saving operation
+    private var isSavingImage = false
 
 
     override fun onCreateView(
@@ -77,14 +79,20 @@ class PreviewEditFragment : Fragment() {
         requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){ isGranted ->
             if(isGranted){
                 Snackbar.make(binding.root, "$activePermissionRequested permission granted.", Snackbar.LENGTH_SHORT).show()
-                //if User was trying to edit an Image continue
+
+                //Continuity if user was trying to
+                //edit image using device's image editors
                 if (isPerformExternalEditing){
                     isPerformExternalEditing = false
                     beginExternalEdit()
                 }
-                if (isPerformInAppEditing){
-                    isPerformInAppEditing = false
-                    beginInAppEditing()
+
+                //Continuity if user was trying to save image
+                if (isSavingImage){
+                    //call the function to save the image to the device
+                    if (saveImage())
+                    //Notify the user the Image has been saved
+                    Snackbar.make(binding.root, "Success! Image saved", Snackbar.LENGTH_LONG).show()
                 }
             } else{
                 Snackbar.make(binding.root, "$activePermissionRequested permission denied", Snackbar.LENGTH_SHORT).show()
@@ -121,6 +129,7 @@ class PreviewEditFragment : Fragment() {
         }
         //When the Wallpaper btn is clicked
         binding.downloadBtn.setOnClickListener {
+            isSavingImage = true
             //call the function to save the image to the device
             if (saveImage())
             //Notify the user the Image has been saved
@@ -138,10 +147,19 @@ class PreviewEditFragment : Fragment() {
             if (requestKey == chooseImageEditorKey) {
                 when (result.getInt("Edit With")) {
                     1 -> {
-                        //begin in-app editing
-                        beginInAppEditing()
+                        //Continue with this app to edit
+                        findNavController().navigate(
+                            PreviewEditFragmentDirections
+                                .actionPreviewEditFragmentToEditFragment(
+                                    args.imageUrl,
+                                    args.isDeviceImageSource
+                                )
+                        )
                     }
                     2 -> {
+                        //let the UI know the user is trying
+                        //to edit an image
+                        isPerformExternalEditing = true
                         //begin external editing
                         beginExternalEdit()
                     }
@@ -152,25 +170,11 @@ class PreviewEditFragment : Fragment() {
         return binding.root
     }
 
-    //Edits the app internally
-    private fun beginInAppEditing() {
-        isPerformInAppEditing = true
-        //Continue with this app to edit
-        findNavController().navigate(
-            PreviewEditFragmentDirections
-                .actionPreviewEditFragmentToEditFragment(
-                    imageUrl,
-                    isDeviceImageSource
-                )
-        )
-    }
 
     //Edits an Image using other app
     private fun beginExternalEdit() {
         //Save the Image File for Edit
         if (saveImage()) {
-            //let the UI know the user is trying to edit an image
-            isPerformExternalEditing = true
             //Launch Intent to choose other image editor
             //on user's device
             //Send the Image to the device's image editor
@@ -246,11 +250,15 @@ class PreviewEditFragment : Fragment() {
                     stream?.flush()
                     //close the stream
                     stream?.close()
+                    //let the UI know image download operation has finished
+                    isSavingImage = false
                 }
                 isSaved = true
             } catch (exception: IOException){
                 Snackbar.make(binding.root, "Unable to save Image to device", Snackbar.LENGTH_SHORT).show()
                 isSaved = false
+                //let the UI know image download operation has finished
+                isSavingImage = false
             }
         } else
             requestPermission(mediaPermissionsRequired)
@@ -262,7 +270,7 @@ class PreviewEditFragment : Fragment() {
     //called to request the necessary permissions from the user
     private fun requestPermission(permissionsList: List<String>) {
         for (permission in permissionsList){
-            activePermissionRequested = getPermissionNameText(permission)
+            activePermissionRequested = getPermissionNameText(permission).lowercase()
             if(shouldShowRequestPermissionRationale(permission)){
                 Snackbar.make(binding.root, getString(R.string.media_access_permission, activePermissionRequested), Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.permission_continue_snackbar_action_text){

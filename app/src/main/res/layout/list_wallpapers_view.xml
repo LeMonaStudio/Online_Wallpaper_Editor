@@ -22,22 +22,23 @@
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="8dp"
         app:cardBackgroundColor="@color/black"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/single_image"
-            tools:src="@tools:sample/backgrounds/scenic"
-            android:adjustViewBounds="true"
             imageUrl="@{wallpaperUrl}"
             isDeviceImage="@{isDeviceImage}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="450dp"
             android:layout_gravity="center"
+            android:adjustViewBounds="true"
             android:onClick="@{() -> clickListener.onClick(wallpaperUrl)}"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="200dp"
-            android:layout_height="200dp"/>
+            tools:src="@tools:sample/backgrounds/scenic" />
 
     </com.google.android.material.card.MaterialCardView>
 </layout>

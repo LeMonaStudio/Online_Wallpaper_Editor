@@ -4,6 +4,6 @@ A app that fetches image from a user's device or from an online database and edi
 This app provides in-app editing features using the [PhotoEditor library](https://github.com/burhanrashid52/PhotoEditor)
 
 ### Future Updates
-There's no plan of providing future updates for this project.
+There are no plans of providing future updates for this project.
 
 
